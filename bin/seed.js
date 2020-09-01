@@ -61,7 +61,7 @@ const seed = async () => {
     genre: song.genre
   })))
 
-  conn.close()
+  //conn.close()
   console.log(`
 
     Seeding successful!
@@ -71,7 +71,7 @@ const seed = async () => {
 }
 
 seed().catch(err => {
-  conn.close()
+  //conn.close()
   console.log(`
 
     Error seeding:
@@ -82,3 +82,5 @@ seed().catch(err => {
 
   `)
 })
+
+module.exports = seed

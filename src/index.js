@@ -33,11 +33,12 @@ class Main extends React.Component {
     ) : (
       <Display albums={this.state.albums} />
     );
+    
 
     return (
       <div className="container">
         <Sidebar />
-        {renderObj}
+        {renderObj} 
       </div>
     );
   }

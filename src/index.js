@@ -9,20 +9,20 @@ class Main extends React.Component {
       albums: [],
       selectedAlbum: {},
     };
-    this.getAlbum = this.getAlbum.bind(this);
-  }
-
-  async getAlbum(albumId, select = true) {
-    if (select) {
-      const res = await axios.get(`/albums/${albumId}`);
-      console.log('in getAlbum ', res.data);
-      this.setState({ selectedAlbum: res.data });
-    } else {
-      this.setState({ selectedAlbum: {} });
-    }
   }
 
   async componentDidMount() {
+    const hashLoad = async () => {
+      const id = window.location.hash.slice(1);
+      if (id) {
+        const res = await axios.get(`/albums/${id}`);
+        this.setState({ selectedAlbum: res.data });
+      } else {
+        this.setState({ selectedAlbum: {} });
+      }
+    };
+    window.addEventListener('hashchange', hashLoad);
+    hashLoad();
     const res = await axios.get('/albums/');
     this.setState({ albums: res.data });
   }
@@ -31,45 +31,43 @@ class Main extends React.Component {
     const renderObj = this.state.selectedAlbum.name ? (
       <SingleAlbum album={this.state.selectedAlbum} />
     ) : (
-      <Display albums={this.state.albums} getAlbum={this.getAlbum} />
+      <Display albums={this.state.albums} />
     );
 
     return (
       <div className="container">
-        <Sidebar getAlbum={this.getAlbum} />
+        <Sidebar />
         {renderObj}
       </div>
     );
   }
 }
 
-const Sidebar = ({ getAlbum }) => {
-  console.log('in Sidebar ', getAlbum);
+const Sidebar = () => {
+  
   return (
     <div id="albums" className="row wrap">
       <h3>
-        <a onClick={() => getAlbum(0, false)}>Albums</a>
+        <a href="#">Albums</a>
       </h3>
     </div>
   );
 };
 
-const Display = ({ albums, getAlbum }) => {
-  console.log('in Display ', getAlbum);
+const Display = ({ albums }) => {
   return (
     <div id="albums" className="row wrap">
       {albums.map((album) => (
-        <AlbumDiv album={album} key={album.id} getAlbum={getAlbum} />
+        <AlbumDiv album={album} key={album.id} />
       ))}
     </div>
   );
 };
 
-const AlbumDiv = ({ album, getAlbum }) => {
-  console.log('in AlbumDiv ', getAlbum);
+const AlbumDiv = ({ album }) => {
   return (
     <div className="album">
-      <a onClick={() => getAlbum(album.id)}>
+      <a href={`#${album.id}`}>
         <img src={album.artworkUrl} />
         <p>{album.name}</p>
         <small>{album.artist.name}</small>

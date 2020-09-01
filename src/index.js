@@ -81,7 +81,7 @@ const AlbumDiv = ({ album, getAlbum }) => {
 const SongInfo = ({ song, artist }) => {
   return (
     <tr>
-      <td>1</td>
+      <td>{song.id}</td>
       <td>{song.name}</td>
       <td>{artist}</td>
       <td>{song.genre}</td>
